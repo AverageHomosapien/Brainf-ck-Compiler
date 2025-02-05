@@ -1,31 +1,40 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"os"
-	"types"
 )
 
+const memory_size = 30000 // 30,000 memory cells is the agreed standard for the Brainf*ck language
+
 func main() {
-	var run_case types.RunType = types.Compile
-	if len(os.Args) > 1 && os.Args[1] == "interpret" {
-		run_case = types.Interpret
-	} else if len(os.Args) > 1 && os.Args[1] == "help" {
-		fmt.Println("Usage: main.exe [interpret|compile] [-s filename|-i console_input]")
+	var method = *flag.String("m", "", "Method to use (interpret or compile)")
+	var code = *flag.String("i", "", "Brainf*ck code to interpret")
+	var filepath = *flag.String("s", "", "Filepath to Brainf*ck code to interpret")
+	flag.Parse()
+
+	if method == "interpret" {
+		interpret(code)
+	} else if method == "compile" {
+		compile(filepath)
+	} else {
+		fmt.Println("Usage: main.exe -m [interpret|compile|help] [-s filepath|-i console_input]")
 		return
 	}
+}
 
-	if run_case == types.Interpret {
-		interpret()
-	} else {
-		compile()
+func interpret(code string) {
+	fmt.Println(code)
+
+	for {
+		if len(code) != 0 {
+			break
+		}
+		fmt.Println("Enter your Brainf*ck code: ")
+		fmt.Scan(&code)
 	}
 }
 
-func interpret() {
-
-}
-
-func compile() {
+func compile(code string) {
 
 }
