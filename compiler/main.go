@@ -8,7 +8,6 @@ import (
 )
 
 const memory_size = 30000 // 30,000 memory cells is the agreed standard for the Brainf*ck language
-
 const help_message = `Usage: main.exe -m [interpret|compile|help] [-s filepath|-i console_input]`
 
 func main() {
@@ -21,8 +20,6 @@ func main() {
 	flag.StringVar(&cli_code, "i", "", "Brainf*ck code to interpret")
 	flag.StringVar(&filepath, "s", "", "Filepath to Brainf*ck code to interpret")
 	flag.Parse()
-
-	fmt.Println("RUNNING")
 
 	var code = extract_code_to_run(cli_code, filepath)
 	if len(code) == 0 {
@@ -62,8 +59,6 @@ func extract_code_to_run(cli_code string, filepath string) string {
 		}
 		code = string(data)
 	}
-	fmt.Println("Code to run: " + cli_code)
-	fmt.Println("Filepath: " + filepath)
 	return code
 }
 
