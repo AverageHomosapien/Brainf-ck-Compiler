@@ -40,12 +40,12 @@ func main() {
 }
 
 func interpret(code string) {
-	fmt.Println("Interpreting code... " + code)
+	fmt.Println("Interpreting code... \n")
 	run(code)
 }
 
 func compile(code string) {
-	fmt.Println("Compiling code... " + code)
+	fmt.Println("Compiling code... \n")
 }
 
 func extract_code_to_run(cli_code string, filepath string) string {
@@ -81,17 +81,19 @@ func run(code string) {
 		case '-':
 			memory[memory_pointer]--
 		case '.':
-			fmt.Print(rune(memory[memory_pointer]))
+			fmt.Print(string(memory[memory_pointer]))
 		case ',':
 			fmt.Scan(&memory[memory_pointer])
 		case '[':
-			if (memory[memory_pointer] == 0) {
-
+			// If the memory location is already 0, skip to the end of the loop
+			if memory[memory_pointer] == 0 {
+				for code_pointer < len(code) && code[code_pointer] != ']' {
+					code_pointer++
+				}
 			}
-			// TODO: skip past matching ] if already 0
 			start_loop_pointers.Push(memory_pointer, code_pointer)
 		case ']':
-			original_code_pointer, original_memory_pointer, is_item := start_loop_pointers.Peek()
+			original_memory_pointer, original_code_pointer, is_item := start_loop_pointers.Peek()
 			if !is_item {
 				log.Fatal("No loop pointer found")
 				os.Exit(-1)
@@ -101,15 +103,9 @@ func run(code string) {
 			if memory[original_memory_pointer] == 0 {
 				start_loop_pointers.Pop()
 			} else {
-				code_pointer = original_code_pointer + 1
+				code_pointer = original_code_pointer
 			}
 		}
 		code_pointer++
-	}
-
-	fmt.Print("\n\n Output:\n")
-
-	for i := 0; i < 20; i++ {
-		fmt.Println(memory[i])
 	}
 }
