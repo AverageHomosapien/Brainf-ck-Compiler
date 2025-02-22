@@ -1,6 +1,7 @@
 package main
 
 import (
+	types "compiler_types"
 	"flag"
 	"fmt"
 	"log"
@@ -65,8 +66,9 @@ func extract_code_to_run(cli_code string, filepath string) string {
 func run(code string) {
 	var memory [memory_size]int
 	var memory_pointer int = 0
-
 	var code_pointer int = 0
+
+	var start_loop_pointers types.Stack
 
 	for code_pointer < len(code) {
 		switch code[code_pointer] {
@@ -79,22 +81,35 @@ func run(code string) {
 		case '-':
 			memory[memory_pointer]--
 		case '.':
-			fmt.Print(string(memory[memory_pointer]))
+			fmt.Print(rune(memory[memory_pointer]))
 		case ',':
 			fmt.Scan(&memory[memory_pointer])
 		case '[':
-			if memory[memory_pointer] == 0 {
-				for code[code_pointer] != ']' {
-					code_pointer++
-				}
+			if (memory[memory_pointer] == 0) {
+
 			}
+			// TODO: skip past matching ] if already 0
+			start_loop_pointers.Push(memory_pointer, code_pointer)
 		case ']':
-			if memory[memory_pointer] != 0 {
-				for code[code_pointer] != '[' {
-					code_pointer--
-				}
+			original_code_pointer, original_memory_pointer, is_item := start_loop_pointers.Peek()
+			if !is_item {
+				log.Fatal("No loop pointer found")
+				os.Exit(-1)
+			}
+
+			// Check if the loop should continue (does initial memory location == 0)
+			if memory[original_memory_pointer] == 0 {
+				start_loop_pointers.Pop()
+			} else {
+				code_pointer = original_code_pointer + 1
 			}
 		}
 		code_pointer++
+	}
+
+	fmt.Print("\n\n Output:\n")
+
+	for i := 0; i < 20; i++ {
+		fmt.Println(memory[i])
 	}
 }
