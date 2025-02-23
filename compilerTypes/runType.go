@@ -1,4 +1,4 @@
-package compiler_types
+package compilerTypes
 
 type RunType int
 

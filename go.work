@@ -2,6 +2,6 @@ go 1.22.2
 
 use (
 	./compiler
-	./parsing
-	./compiler_types
+	./translators
+	./compilerTypes
 )
