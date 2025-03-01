@@ -18,6 +18,7 @@ func (i Interpreter) Translate(code string) {
 
 	var startLoopPointers types.Stack
 
+
 	for codePointer < len(code) {
 		switch code[codePointer] {
 		case '>':
@@ -31,7 +32,7 @@ func (i Interpreter) Translate(code string) {
 		case '.':
 			fmt.Print(string(memory[memoryPointer]))
 		case ',':
-			fmt.Scan(&memory[memoryPointer])
+			fmt.ScanByte(&memory[memoryPointer])
 		case '[':
 			// If the memory location is already 0, skip to the end of the loop
 			if memory[memoryPointer] == 0 {
